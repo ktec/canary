@@ -10,6 +10,8 @@ defmodule Canary.Mixfile do
      An authorization library to restrict what resources the current user is
      allowed to access, and load resources for you.
      """,
+     # for the test environment for Elixir v1.2 onward.
+     consolidate_protocols: Mix.env != :test,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps,
