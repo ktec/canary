@@ -1,17 +1,3 @@
-defmodule User do
-  defstruct id: 1
-end
-
-defmodule Post do
-  use Ecto.Model
-
-  schema "posts" do
-    belongs_to :user, :integer, define_field: false # :defaults not working so define own field with default value
-
-    field :user_id, :integer, default: 1
-  end
-end
-
 defmodule Repo do
   def get(User, 1), do: %User{}
   def get(User, _id), do: nil
@@ -26,22 +12,6 @@ defmodule Repo do
   def preload(%Post{id: 2, user_id: 2}, :user), do: %Post{id: 2, user_id: 2, user: %User{id: 2}}
   def preload([%Post{id: 1},  %Post{id: 2, user_id: 2}], :user), do: [%Post{id: 1}, %Post{id: 2, user_id: 2, user: %User{id: 2}}]
   def preload(resources, _), do: resources
-end
-
-defimpl Canada.Can, for: User do
-
-  def can?(%User{id: user_id}, action, %Post{user_id: user_id})
-  when action in [:index, :show, :new, :create], do: true
-
-  def can?(%User{}, :index, Post), do: true
-
-  def can?(%User{}, action, Post)
-    when action in [:new, :create], do: true
-
-  def can?(%User{id: user_id}, action, %Post{user: %User{id: user_id}})
-    when action in [:edit, :update], do: true
-
-  def can?(%User{}, _, _), do: false
 end
 
 defimpl Canada.Can, for: Atom do
